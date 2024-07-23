@@ -10,9 +10,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       : _productRepository = productRepsitory,
         super(InitialProductState()) {
     on<GetProductsEvent>(_onGetProducts);
-    // on<AddProductEvent>(_onAddProduct);
-    // on<EditProductEvent>(_onEditProduct);
-    // on<DeleteProductEvent>(_onDeleteProduct);
+    on<AddProductEvent>(_onAddProduct);
+    on<EditProductEvent>(_onEditProduct);
+    on<DeleteProductEvent>(_onDeleteProduct);
   }
   Future<void> _onGetProducts(GetProductsEvent event, Emitter emit) async {
     emit(InitialProductState());
@@ -23,4 +23,38 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ErrorProductState(message: e.toString()));
     }
   }
+  Future<void> _onAddProduct(AddProductEvent event, emit) async {
+    emit(InitialProductState());
+
+    try {
+      await _productRepository.addProduct(event.product);
+
+      _onGetProducts(GetProductsEvent(), emit);
+    } catch (e) {
+      emit(ErrorProductState(message: "Error on ADD:   $e"));
+    }
+  }
+
+  Future<void> _onEditProduct(EditProductEvent event, emit) async {
+    emit(InitialProductState());
+
+    try {
+      await _productRepository.updateProduct(event.product);
+
+      _onGetProducts(GetProductsEvent(), emit);
+    } catch (e) {
+      emit(ErrorProductState(message: "Error on ADD:   $e"));
+    }
+  }
+  Future<void> _onDeleteProduct(DeleteProductEvent event, Emitter emit) async {
+    emit(InitialProductState());
+    try {
+      await _productRepository.deleteProduct(event.id);
+
+      _onGetProducts(GetProductsEvent(), emit);
+    } catch (e) {
+      emit(ErrorProductState(message: "Error on DELETE: $e"));
+    }
+  }
+
 }

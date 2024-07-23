@@ -26,4 +26,43 @@ class DioClient {
       rethrow;
     }
   }
+
+  Future<Response> add(
+      {required String url, Map<String, dynamic>? data}) async {
+    try {
+      final response = await dio.post(url, data: data);
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> update(
+      {required String url, Map<String, dynamic>? data}) async {
+    try {
+      final response = await dio.patch(
+        url,
+        data: data,
+      );
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> delete(
+      {required String url, Map<String, dynamic>? data}) async {
+    try {
+      final response = await dio.delete(
+        url,
+        data: data,
+      );
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

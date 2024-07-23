@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:lesson_81/core/network/dio_client.dart';
 import 'package:lesson_81/data/models/product.dart';
 
@@ -19,5 +20,34 @@ class DioProductService {
     }
   }
 
+  Future<Product> addProduct(Product product) async {
+    try {
+      final response =
+          await dioClient.add(url: '/products', data: product.toMap());
 
+      return Product.fromMap(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Product> editProduct(Product product) async {
+    try {
+      final response = await dioClient.update(
+          url: "/products/${product.id}", data: product.toMap());
+
+      return Product.fromMap(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> deleteProduct(String id) async {
+    try {
+      final response = await dioClient.delete(url: "/products/$id");
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
